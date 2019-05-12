@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='jquery-ui.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename='bootstrap.min.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename='my_project.css')}}">
+  </head>
+  <body>
+  Vector Commander
+
+  <img class="drone_video" id="vector_video" src="/video_stream">
+  </body>
+  <script type="text/javascript" src="{{url_for('static', filename='jquery-3.3.1.min.js')}}"></script>
+  <script type="text/javascript" src="{{url_for('static', filename='jquery-ui.js')}}"></script>
+  <script type="text/javascript" src="{{url_for('static', filename='bootstrap.min.js')}}"></script>
+  <script type="text/javascript" src="{{url_for('static', filename='my_project.js')}}"></script>
+</html>

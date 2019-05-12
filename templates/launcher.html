@@ -1,0 +1,104 @@
+{% extends "layout.html" %}
+{% block title %}MapR DSR Manager{% endblock %}
+{% block username %}
+  <span class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    {{session.username}}
+  </span>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <a class="dropdown-item" href="/logout">Logout</a>
+    <a class="dropdown-item" id="reset_button" href="#" data-toggle="modal" data-target="#reset_modal">Reset</a>
+  </div>
+{% endblock %}
+{% block content %}
+<span id="now" data-now={{now}}></span>
+<div class="col-md-8 offset-md-2">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#Id</th>
+        <th scope="col">Owner</th>
+        <th scope="col">Username</th>
+        <th scope="col">Status</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for container in active_containers %}
+      <tr>
+        <th id="{{container._id}}_id" data-port="{{container.port}}" scope="row">
+          {% if container.status == 'running' %}
+            <a class="container_link" href="#" target="_blank" data-port="{{container.port}}">
+              {{container._id}}
+            </a>
+          {% else %}
+            {{container._id}}
+          {% endif %}
+        </th>
+        <td>{{container.owner}}</td>
+        <td>{{container.username}}</td>
+        <td class="container_status" id="{{container._id}}_status"
+            data-status={{container.status}}
+            data-container="{{container._id}}" 
+            data-creation="{{container.creation_date}}" 
+            data-start="{{container.start_date}}">
+        </td>
+        <td>
+          {% if container.status == 'stopped' %}
+            <button class="action_button start_container btn btn-secondary" data-container="{{container._id}}">Start</button>
+          {% else %}
+            <button class="action_button stop_container btn btn-secondary" data-container="{{container._id}}">Stop</button>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <hr id="over_launch_hr">
+  <div class="text-right">
+    <!-- Trigger the modal with a button -->
+    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#new_container_modal">Launch new DSR</button>
+  </div>
+</div>
+  <!-- Modal -->
+  <div id="new_container_modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Launch new DSR instance</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            Please provide credentials for your new DSR.<p>
+            <label for="container_username">Username</label>
+            <input type="text" class="form-control" name="username" id="container_username" placeholder="Enter username">
+            <label for="container_password">Password</label>
+            <input type="password" class="form-control" name="password" id="container_password" placeholder="Password">
+            <hr>
+            <div class="text-right">
+              <button id="new_container_button" class="btn btn-secondary">Launch</button>
+            </div>
+            <div id="new_container_loader" style="display:none">
+              <i class="fa fa-cog fa-spin fa-3x fa-fw"></i>
+            </div>
+      </div>
+    </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <!-- Reset Modal -->
+  <div id="reset_modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Resetting application</h4>
+          <i class="fa fa-cog fa-spin fa-3x fa-fw"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
